@@ -1,19 +1,25 @@
 #!/usr/bin/python3
+"""
+makeChange method
+"""
 
-def makeChange ( coins, total):
 
-    if (total <= 0):
+def makeChange(coins, total):
+    """
+    determine the fewest number of coins needed
+    to meet a given amount total
+    """
+    number_coins = 0
+    cents = 0
+    if total <= 0:
         return 0
-    if total in coins:
-        return 1
-     numCoins = 0
-     currCoin = 0
-    coins = reversed(sorted(coins))
+
+    coins = sorted(coins, reverse=True)
 
     for coin in coins:
-        while currCoin + coin <= total:
-            numCoins += 1
-            currCoin += coin
-    if currCoin != total:
-        return -1
-    return numCoins
+        while cents + coin <= total:
+            cents += coin
+            number_coins += 1
+        if cents == total:
+            return number_coins
+    return -1
