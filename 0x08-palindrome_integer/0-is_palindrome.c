@@ -3,24 +3,25 @@
 #include "palindrome.h"
 
 /**
- * is_palindrome - check palindrome
- * @n: unsigned long
- * Return: integer 1 or 0
+ * @param n : unsigned long n
+ * @return int 
  */
+
+
 int is_palindrome(unsigned long n)
 {
-	unsigned long num, val = 0;
+    unsigned long x = 0, r, temp;
 
-	num = n;
+    temp = n;
+    while (n != 0)
+    {
+        r = n % 10;
+        x = x * 10 + r;
+        n = n / 10;
+    }
 
-	while (num != 0)
-	{
-		val = val * 10;
-		val = val + num % 10;
-		num = num / 10;
-	}
-	if (n == val)
-		return (1);
-	else
-		return (0);
+    if (x == temp)
+        return 1;
+    else
+        return 0;
 }
