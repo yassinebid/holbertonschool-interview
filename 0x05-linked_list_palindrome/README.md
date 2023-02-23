@@ -1,1 +1,1 @@
-# 0x05-linked_list_palindrome
+0x05. Linked list palindrome
