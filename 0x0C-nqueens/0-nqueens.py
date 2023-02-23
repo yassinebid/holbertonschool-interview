@@ -1,41 +1,103 @@
 #!/usr/bin/python3
-import sys
+from sys import argv
 
 
-def isSafe(Board, line, i):
-    """ checks if we can insert queen at column i in that line in Board"""
-    for x in range(line):
-        if (Board[x] == i or
-                Board[x] + line - x == i or
-                Board[x] + x - line == i):
-            return False
-    return True
+def check(position, i, j, n):
+    """
+    Check if position[i, j] have any intersections
+    with any of the previous queens
+    position: list of cordination of queens
+    [i, j]: position of the new queen
+    n: nbr of queens
+    """
+    # print(position)
+    for pos in position:
+        all = generat(pos, n)
+        if [i, j] in all:
+            # print("{},{} => {}".format(i,j,all))
+            return 0
+    return 1
 
 
-def Fill_line(Board, line):
-    """ fills each line of the board with the correct index """
-    for i in range(len(Board)):
-        if isSafe(Board, line, i):
-            Board[line] = i
-            if line < len(Board) - 1:
-                Fill_line(Board, line + 1)
-            else:
-                print([[i, Board[i]] for i in range(len(Board))])
+def generat(pos, n):
+    """
+    Given a cordination of a queen
+    genearte all the possible movment
+    in the board
+    pos= [x, y]
+    n: number of queens
+    """
+    all = []
+    p0 = pos[0]
+    p1 = pos[1]
+    # print(pos)
+    for i in range(n):
+        if (p1 + i) < n:
+            all.append([p0, p1 + i])
+        if (p0 + i) < n:
+            all.append([p0 + i, p1])
+        if (p1 - i) >= 0:
+            all.append([p0, p1 - i])
+        if (p0 - i) >= 0:
+            all.append([p0 - i, p1])
+        if (p0 + i) < n and (p1 + i) < n:
+            all.append([p0 + i, p1 + i])
+        if (p0 - i) >= 0 and (p1 - i) >= 0:
+            all.append([p0 - i, p1 - i])
+        if (p0 + i) < n and (p1 - i) >= 0:
+            all.append([p0 + i, p1 - i])
+        if (p0 - i) >= 0 and (p1 + i) < n:
+            all.append([p0 - i, p1 + i])
+    # print(all)
+    return (all)
 
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
-try:
-    n = int(sys.argv[1])
-except:
-    print("N must be a number")
-    sys.exit(1)
-if n < 4:
-    print("N must be at least 4")
-    sys.exit(1)
 
-Board = [-1 for i in range(n)]
-Fill_line(Board, 0)
+def alter(array, position, count, result, y, z, n):
+
+    """
+    print("array:")
+    for i in array:
+        print(i, "\n")
+    """
+    # print("count={}".format(count))
+
+
+if __name__ == "__main__":
+    """
+    Find all possible locations of queens
+    in a n*n board
+    Return the queens cordinations
+    """
+    if len(argv) < 1:
+        print("Usage: nqueens N\n")
+        exit(1)
+    if int(argv[1]) < 4:
+        print("N must be at least 4\n")
+        exit(1)
+    n = int(argv[1])
+
+    array = [[0 for i in range(n)] for i in range(n)]
+    position = []
+    result = []
+
+    for x in range(n):
+        array[0][x] = 1
+        position.append([0, x])
+        count = 1
+
+        # print("positions: {}".format(position))
+        for i in range(1, n):
+            for j in range(n):
+                if (check(position, i, j, n)):
+                    array[i][j] = 1
+                    count += 1
+                    position.append([i, j])
+
+        if count == n:
+            print([[i, j] for i in range(n) for j in range(n) if array[i][j] == 1])
+        array = [[0 for i in range(n)] for i in range(n)]
+        position = []
+        result = []
 
 
 
